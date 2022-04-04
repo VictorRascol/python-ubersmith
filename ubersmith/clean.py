@@ -131,7 +131,13 @@ class clean(object):
                 # apply cleaners to specific values
                 for k, cleaner in self.values.items():
                     try:
-                        val[k] = cleaner(val[k])
+                        #check if val[k] is string or not first.
+                        # if it is a string, proceed as usual
+                        # if it is dict, call clean_dict again
+                        if type(val[k]) is dict:
+                            val[k] = self._clean_dict(val[k])
+                        else:
+                            val[k] = cleaner(val[k])
                     except KeyError as e:
                         if self.raises:
                             raise e
